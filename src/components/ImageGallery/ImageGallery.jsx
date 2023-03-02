@@ -3,10 +3,10 @@ import PropTypes from 'prop-types';
 import ImageGalleryItem from 'components/ImageGalleryItem/ImageGalleryItem';
 import s from 'components/styles.module.css';
 
-function ImageGallery({ query, onClickImg }) {
+function ImageGallery({ gallery, onClickImg }) {
   return (
     <ul className={s.ImageGallery}>
-      {query.map(({ id, webformatURL, largeImageURL, tags }) => {
+      {gallery.map(({ id, webformatURL, largeImageURL, tags }) => {
         return (
           <ImageGalleryItem
             key={id}

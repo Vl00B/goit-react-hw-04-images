@@ -6,6 +6,7 @@ export default function ImageGalleryItem({ src, tags, dataSrc, onClick }) {
   return (
     <li className={s.ImageGalleryItem} onClick={onClick}>
       <img
+        loading="lazy"
         src={src}
         alt={tags}
         data-src={dataSrc}
