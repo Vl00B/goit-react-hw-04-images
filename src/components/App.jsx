@@ -1,20 +1,19 @@
 import React, { useEffect, useState } from 'react';
-// import React, { Component } from 'react';
-import { ToastContainer } from 'react-toastify';
+import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Searchbar from './SearchBar/SearchBar';
 import ImageGallery from 'components/ImageGallery/ImageGallery';
-import s from 'components/styles.module.css';
 import Button from 'components/Button/Button';
-import api from './API';
-
-import { Modal } from 'components/Modal/Modal';
 import Loader from './Loader/Loader';
+
+import api from './API';
+import s from 'components/styles.module.css';
 
 export default function App() {
   const [pictures, setPictures] = useState([]);
   const [page, setPage] = useState(1);
   const [request, setRequest] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
   const [isActive, setIsActive] = useState(false);
   // const [modalAlt, setModalAlt] = useState('');
   // const [showModal, setModal] = useState(false);
@@ -27,18 +26,34 @@ export default function App() {
     }
 
     const getPictures = async () => {
+      setIsLoading(true);
+
       api.fetchQuery(request, page).then(({ hits, totalHits }) => {
         // const total = totalHits;
         const images = hits.map(({ id, webformatURL, largeImageURL, tags }) => {
           return { id, webformatURL, largeImageURL, tags };
         });
+
+        if (page > Math.ceil(totalHits / 12)) {
+          setIsActive(false);
+          return toast.warn(
+            "We're sorry, but you've reached the end of search results."
+          );
+        }
+
+        if (images.length === 0) {
+          toast.error('There are no matching images. Please, tey again');
+          setIsLoading(false);
+        }
+
         if (images.length > 0) {
           setPictures(prevPictures => {
             return [...prevPictures, ...images];
           });
           setIsActive(true);
+          setIsLoading(false);
         } else {
-          alert('No results! Try other request!');
+          setIsActive(false);
         }
       });
     };
@@ -74,7 +89,7 @@ export default function App() {
 
       <ImageGallery gallery={pictures} />
 
-      {false && (
+      {isLoading && (
         <div className={s.Loader}>
           <Loader color="#27f00c" />
         </div>
