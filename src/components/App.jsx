@@ -18,7 +18,7 @@ export default function App() {
   // const [modalAlt, setModalAlt] = useState('');
   // const [showModal, setModal] = useState(false);
   // const [modalImg, setModalImg] = useState('');
-  // const [error, setError] = useState(false);
+  const [error, setError] = useState(false);
 
   useEffect(() => {
     if (request === '') {
@@ -29,15 +29,16 @@ export default function App() {
       setIsLoading(true);
 
       api.fetchQuery(request, page).then(({ hits, totalHits }) => {
-        // const total = totalHits;
+        const total = totalHits;
         const images = hits.map(({ id, webformatURL, largeImageURL, tags }) => {
           return { id, webformatURL, largeImageURL, tags };
         });
 
-        if (page > Math.ceil(totalHits / 12)) {
+        if (page === Math.ceil(total / 12)) {
           setIsActive(false);
+          setIsLoading(false);
           return toast.warn(
-            "We're sorry, but you've reached the end of search results."
+            "We're sorry, but you've reached the end of your query."
           );
         }
 

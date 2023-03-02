@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import PropTypes from 'prop-types';
 import s from 'components/styles.module.css';
-import { noRequest } from 'components/notifications';
+import { toast } from 'react-toastify';
 
 export default function Searchbar({ onSubmit }) {
   const [prompt, setPrompt] = useState('');
@@ -9,7 +9,7 @@ export default function Searchbar({ onSubmit }) {
   const handleSubmit = e => {
     e.preventDefault();
     if (!prompt.trim()) {
-      noRequest();
+      toast.warning('Please, input your request!');
       return;
     }
     onSubmit(prompt.trim().toLowerCase());
