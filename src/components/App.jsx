@@ -35,17 +35,19 @@ export default function App() {
           return { id, webformatURL, largeImageURL, tags };
         });
 
+        if (images.length === 0) {
+          toast.error(
+            'There are no matching images. Please, try other request.'
+          );
+          setIsLoading(false);
+        }
+
         if (page === Math.ceil(total / 12)) {
           setIsActive(false);
           setIsLoading(false);
           return toast.warn(
             "We're sorry, but you've reached the end of your query."
           );
-        }
-
-        if (images.length === 0) {
-          toast.error('There are no matching images. Please, tey again');
-          setIsLoading(false);
         }
 
         if (images.length > 0) {
