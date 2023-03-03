@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+
 import Searchbar from './SearchBar/SearchBar';
 import ImageGallery from 'components/ImageGallery/ImageGallery';
 import Button from 'components/Button/Button';
 import Loader from './Loader/Loader';
+import { Modal } from './Modal/Modal';
 
 import api from './API';
 import s from 'components/styles.module.css';
@@ -15,9 +17,9 @@ export default function App() {
   const [request, setRequest] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [isActive, setIsActive] = useState(false);
-  // const [modalAlt, setModalAlt] = useState('');
-  // const [showModal, setModal] = useState(false);
-  // const [modalImg, setModalImg] = useState('');
+  const [showModal, setModal] = useState(false);
+  const [modalAlt, setModalAlt] = useState('');
+  const [modalImg, setModalImg] = useState('');
 
   useEffect(() => {
     if (request === '') {
@@ -67,6 +69,14 @@ export default function App() {
     setPage(1);
   };
 
+  const handleModal = event => {
+    const imgForModal = event.target.dataset.src;
+    const altForModal = event.target.alt;
+    setModal(true);
+    setModalAlt(altForModal);
+    setModalImg(imgForModal);
+  };
+
   const toLoadMore = () => {
     setPage(page => page + 1);
   };
@@ -87,7 +97,7 @@ export default function App() {
         theme="light"
       />
 
-      <ImageGallery gallery={pictures} />
+      <ImageGallery gallery={pictures} onClickImg={handleModal} />
 
       {isLoading && (
         <div className={s.Loader}>
@@ -96,6 +106,15 @@ export default function App() {
       )}
 
       {isActive && <Button handleClickBtn={toLoadMore} />}
+      {showModal && (
+        <Modal
+          onClose={() => {
+            setModal(!showModal);
+          }}
+        >
+          <img src={modalImg} alt={modalAlt} />
+        </Modal>
+      )}
     </>
   );
 }
