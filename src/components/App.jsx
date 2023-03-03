@@ -18,7 +18,6 @@ export default function App() {
   // const [modalAlt, setModalAlt] = useState('');
   // const [showModal, setModal] = useState(false);
   // const [modalImg, setModalImg] = useState('');
-  const [error, setError] = useState(false);
 
   useEffect(() => {
     if (request === '') {
