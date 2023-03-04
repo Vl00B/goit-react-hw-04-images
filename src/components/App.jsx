@@ -107,7 +107,7 @@ export default function App() {
         </div>
       )}
 
-      {isActive && <Button handleClickBtn={toLoadMore} />}
+      {isActive && <Button handleClickBtn={toLoadMore} disabled={isLoading} />}
       {showModal && (
         <Modal
           onClose={() => {
